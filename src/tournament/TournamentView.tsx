@@ -1,33 +1,62 @@
 import TournamentPlayer from "./components/TournamentPlayer";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 // @ts-ignore
 export default function TournamentView({id, name = 'Untitled', date}) {
     const [championsLibrary, setChampionsLibrary] = useState([
-        {id:'test', value:'Pense à charger la liste'}
+        {id: 'test', value: 'Pense à charger la liste'}
     ])
+    const saveStateInLocalStorage = () => {
+      localStorage.setItem('players', JSON.stringify(players));
+    }
+        useEffect(()=>{
+saveStateInLocalStorage();
+        })
+    // @ts-ignore
     const [players, setPlayers] = useState([
-        {
-            username: 'Raiz',
-            champions: ['Akali', 'Ahri']
-        },
-        {
-            username: 'Citronatorix',
-            champions: ['Urgot', 'Darius']
-        }
+            {
+                username: 'Raiz',
+                champions: [],
+                group: 'red',
+                wins:0
+            },
+            {
+                username: 'Citronatorix',
+                champions: [],
+                group: 'blue',
+                wins:0
+            },
+            {
+                username: 'Citronx',
+                champions: [],
+                group: 'maroon',
+                wins:0
+            },
+            {
+                username: 'Ci',
+                champions: [],
+                group: 'purple',
+                wins:0
+            },
+            {
+                username: 'Ci',
+                champions: [],
+                group: 'green',
+                wins:0
+            }
         ]
     );
-    const updateChampionsLibrary = function updateChampionsLibrary(){
+    console.log(players)
+    const updateChampionsLibrary = function updateChampionsLibrary() {
         axios.get("https://ddragon.leagueoflegends.com/cdn/12.9.1/data/fr_FR/champion.json")
             .then(response => {
                 var championsLib = [];
                 for (const [key, value] of Object.entries(response.data.data)) {
-                    championsLib.push({id:`${key}`, value:`${key}`})
+                    championsLib.push({id: `${key}`, value: `${key}`})
                 }
-                console.log(championsLib);
                 setChampionsLibrary(championsLib);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 // Error
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -48,36 +77,77 @@ export default function TournamentView({id, name = 'Untitled', date}) {
                 console.log(error.config);
             });
     }
-    const updateUsername = function updateUsername(i:number,newUsername:string) {
-        let mapped = players.map((player, index)=>{return index == i ? { ...player, username: newUsername } : { ...player}})
+
+    const updateUsername = function updateUsername(i: number, newUsername: string) {
+        // @ts-ignore
+        let mapped = players.map((player, index: number) => {
+            return index == i ? {...player, username: newUsername} : {...player}
+        })
         console.log(players);
 
         setPlayers(mapped);
         console.log(players);
     };
-    const removeChampion = function removeChampion(i:number, champion:string){
-        let mapped = players.map((player, index)=>{return index == i ? {...player, champions: player.champions.filter(c => c !== champion)} : {...player}});
+    const removeChampion = function removeChampion(i: number, champion: string) {
+        // @ts-ignore
+        let mapped = players.map((player, index) => {
+            // @ts-ignore
+            return index == i ? {...player, champions: player.champions.filter(c => c !== champion)} : {...player}
+        });
         setPlayers(mapped);
     }
-    const addChampion = function addChampion(i:number, champion:string){
-        let mapped = players.map((player, index)=>{return index == i ? {...player, champions: player.champions.concat(champion)} : {...player}});
+    const addChampion = function addChampion(i: number, champion: string) {
+        // @ts-ignore
+        let mapped = players.map((player, index) => {
+            // @ts-ignore
+            return index == i ? {...player, champions: player.champions.concat(champion)} : {...player}
+        });
         setPlayers(mapped);
     }
-    function addPlayer(uname:string) {
+    const addWin = function addWin(i:number) {
+        // @ts-ignore
+        let mapped = players.map((player, index: number) => {
+            return index == i ? {...player, wins: player.wins + 1} : {...player}
+        })
+        setPlayers(mapped);
+    }
+    const removeWin = function removeWin(i:number) {
+        let mapped = players.map((player, index: number) => {
+            return index == i ? {...player, wins: player.wins - 1} : {...player}
+        })
+        setPlayers(mapped);
+    }
+    const changeGroup = function changeGroup(i:number, group:string) {
+        let mapped = players.map((player, index: number) => {
+            return index == i ? {...player, group: group} : {...player}
+        })
+        setPlayers(mapped);
+    }
+
+    function addPlayer(uname: string) {
         const newPlayer = {
-            username:uname,
-            champions:[]
+            username: uname,
+            champions: [],
+            group:'default',
+            wins:0
         };
         setPlayers(players.concat(newPlayer));
     }
+
+    // @ts-ignore
     return (
         <div className={'tournament-view'}>
             <button onClick={updateChampionsLibrary}>Charger la liste des champions</button>
             <div className={"tournament-header"}><span>{name}</span></div>
-            <button onClick={()=>{return addPlayer('New')}}>Ajouter un joueur</button>
+            <button onClick={() => {
+                return addPlayer('New')
+            }}>Ajouter un joueur
+            </button>
             <div className={"tournament-players-list"}>
-                {players.map((item, index)=>{
-                    return <TournamentPlayer championsLibrary={championsLibrary} addChampion={addChampion} updateUsername={updateUsername} removeChampion={removeChampion} player={item} key={index}  index={index}/>
+                {players.map((item: object, index: number) => {
+                    return <TournamentPlayer championsLibrary={championsLibrary} addChampion={addChampion}
+                                             updateUsername={updateUsername} removeChampion={removeChampion}
+                                             player={item} key={index} index={index} removeWin={removeWin} addWin={addWin} changeGroup={changeGroup}/>
                 })}
             </div>
 
