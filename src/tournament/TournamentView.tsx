@@ -6,46 +6,31 @@ export default function TournamentView({id, name = 'Untitled', date}) {
     const [championsLibrary, setChampionsLibrary] = useState([
         {id: 'test', value: 'Pense à charger la liste'}
     ])
+    const defaultPlayers = [
+        {
+            username: 'Groupe 1',
+            champions: [],
+            group: 'red',
+            wins:0
+        },
+        {
+            username: 'Groupe 2',
+            champions: [],
+            group: 'blue',
+            wins:0
+        }
+    ];
     const saveStateInLocalStorage = () => {
       localStorage.setItem('players', JSON.stringify(players));
     }
         useEffect(()=>{
-saveStateInLocalStorage();
+            if (players !== defaultPlayers){
+                saveStateInLocalStorage();
+            }
+
         })
     // @ts-ignore
-    const [players, setPlayers] = useState([
-            {
-                username: 'Raiz',
-                champions: [],
-                group: 'red',
-                wins:0
-            },
-            {
-                username: 'Citronatorix',
-                champions: [],
-                group: 'blue',
-                wins:0
-            },
-            {
-                username: 'Citronx',
-                champions: [],
-                group: 'maroon',
-                wins:0
-            },
-            {
-                username: 'Ci',
-                champions: [],
-                group: 'purple',
-                wins:0
-            },
-            {
-                username: 'Ci',
-                champions: [],
-                group: 'green',
-                wins:0
-            }
-        ]
-    );
+    const [players, setPlayers] = useState(defaultPlayers);
     console.log(players)
     const updateChampionsLibrary = function updateChampionsLibrary() {
         axios.get("https://ddragon.leagueoflegends.com/cdn/12.9.1/data/fr_FR/champion.json")
@@ -123,6 +108,12 @@ saveStateInLocalStorage();
         })
         setPlayers(mapped);
     }
+    const getDataFromSave = () => {
+        if (localStorage.getItem('players')){
+            // @ts-ignore
+            setPlayers(JSON.parse(localStorage.getItem('players')))
+        }
+    }
 
     function addPlayer(uname: string) {
         const newPlayer = {
@@ -137,8 +128,12 @@ saveStateInLocalStorage();
     // @ts-ignore
     return (
         <div className={'tournament-view'}>
+            <button onClick={getDataFromSave}>Récuperer la sauvegarde</button>
+            <hr/>
             <button onClick={updateChampionsLibrary}>Charger la liste des champions</button>
+            <hr/>
             <div className={"tournament-header"}><span>{name}</span></div>
+            <hr/>
             <button onClick={() => {
                 return addPlayer('New')
             }}>Ajouter un joueur
