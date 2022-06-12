@@ -24,7 +24,7 @@ export default function TournamentPlayer({player, index, updateUsername, removeC
     }
     return (
         <div className={`tournament-player ${'bg-'+ player.group} ${index % 2 === 0 ? 'even-player':'odd-player'}`}>
-            <div className={"player-infos"}><span className={'player-username'}>{player.username}</span></div>
+            <div className={"player-infos"}><div style={{display:'flex',alignItems:'center', height:'100%', paddingLeft:'30px'}}><span className={'player-username'}>{player.username}</span></div></div>
             <div className="player-double-row">
                 <div className="player-wins">
                     {wins}

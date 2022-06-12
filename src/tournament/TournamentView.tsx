@@ -159,7 +159,7 @@ export default function TournamentView({id, name = 'Untitled', date}) {
             document.querySelector('body').style.backgroundColor=appConfig.backgroundColor}}/>
             <button onClick={()=>{
                 //@ts-ignore
-                document.querySelector('body').style.backgroundColor = appConfig.backgroundColor}}>Corriger bug couleur</button>
+                document.querySelector('body').style.backgroundColor = appConfig.backgroundColor}}>Appliquer partout</button>
             <hr/>
             <button onClick={() => {
                 return addPlayer('New')
