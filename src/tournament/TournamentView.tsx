@@ -154,7 +154,12 @@ export default function TournamentView({id, name = 'Untitled', date}) {
             <option value="black">NOIR</option>
             <option value="white">BLANC</option>
             <option value="neon">NEON</option>
-        </select> --- Couleur de fond: <input type="text" value={appConfig.backgroundColor} onChange={(e)=>{setAppConfig({...appConfig, backgroundColor: e.target.value})}}/>
+        </select> --- Couleur de fond: <input type="text" value={appConfig.backgroundColor} onChange={(e)=>{setAppConfig({...appConfig, backgroundColor: e.target.value});
+            // @ts-ignore
+            document.querySelector('body').style.backgroundColor=appConfig.backgroundColor}}/>
+            <button onClick={()=>{
+                //@ts-ignore
+                document.querySelector('body').style.backgroundColor = appConfig.backgroundColor}}>Corriger bug couleur</button>
             <hr/>
             <button onClick={() => {
                 return addPlayer('New')
