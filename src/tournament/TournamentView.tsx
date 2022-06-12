@@ -6,6 +6,9 @@ export default function TournamentView({id, name = 'Untitled', date}) {
     const [championsLibrary, setChampionsLibrary] = useState([
         {id: 'test', value: 'Pense à charger la liste'}
     ])
+    const [appConfig, setAppConfig] = useState({
+        backgroundColor:'#FFFFFF'
+    })
     const defaultPlayers = [
         {
             username: 'Groupe 1',
@@ -124,15 +127,21 @@ export default function TournamentView({id, name = 'Untitled', date}) {
         };
         setPlayers(players.concat(newPlayer));
     }
+    const removePlayer = (i:number)=>{
+        let data = players.filter((player, index)=>{return index !== i})
+            setPlayers(data);
+    }
 
     // @ts-ignore
+
     return (
-        <div className={'tournament-view'}>
+        <div className={'tournament-view'} style={{backgroundColor:appConfig.backgroundColor}}>
             <button onClick={getDataFromSave}>Récuperer la sauvegarde</button>
             <hr/>
             <button onClick={updateChampionsLibrary}>Charger la liste des champions</button>
             <hr/>
-            <div className={"tournament-header"}><span>{name}</span></div>
+            {/*<div className={"tournament-header"}><span>{name}</span></div>*/}
+            Couleur de fond: <input type="text" value={appConfig.backgroundColor} onChange={(e)=>{setAppConfig({...appConfig, backgroundColor: e.target.value})}}/>
             <hr/>
             <button onClick={() => {
                 return addPlayer('New')
@@ -142,7 +151,7 @@ export default function TournamentView({id, name = 'Untitled', date}) {
                 {players.map((item: object, index: number) => {
                     return <TournamentPlayer championsLibrary={championsLibrary} addChampion={addChampion}
                                              updateUsername={updateUsername} removeChampion={removeChampion}
-                                             player={item} key={index} index={index} removeWin={removeWin} addWin={addWin} changeGroup={changeGroup}/>
+                                             player={item} key={index} index={index} removeWin={removeWin} addWin={addWin} changeGroup={changeGroup} removePlayer={removePlayer}/>
                 })}
             </div>
 
