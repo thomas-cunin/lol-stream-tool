@@ -7,8 +7,10 @@ export default function TournamentView({id, name = 'Untitled', date}) {
         {id: 'test', value: 'Pense à charger la liste'}
     ])
     const [appConfig, setAppConfig] = useState({
-        backgroundColor:'#FFFFFF'
+        backgroundColor:'#FFFFFF',
+        typeOfTrophy:'black'
     })
+
     const defaultPlayers = [
         {
             username: 'Groupe 1',
@@ -25,6 +27,7 @@ export default function TournamentView({id, name = 'Untitled', date}) {
     ];
     const saveStateInLocalStorage = () => {
       localStorage.setItem('players', JSON.stringify(players));
+      localStorage.setItem('config', JSON.stringify(appConfig));
     }
         useEffect(()=>{
             if (players !== defaultPlayers){
@@ -116,6 +119,10 @@ export default function TournamentView({id, name = 'Untitled', date}) {
             // @ts-ignore
             setPlayers(JSON.parse(localStorage.getItem('players')))
         }
+        if(localStorage.getItem('config')){
+            // @ts-ignore
+            setAppConfig(JSON.parse(localStorage.getItem('config')))
+        }
     }
 
     function addPlayer(uname: string) {
@@ -131,7 +138,9 @@ export default function TournamentView({id, name = 'Untitled', date}) {
         let data = players.filter((player, index)=>{return index !== i})
             setPlayers(data);
     }
-
+    const changeTrophyType = (type:string)=>{
+        setAppConfig({...appConfig, typeOfTrophy: type});
+    }
     // @ts-ignore
 
     return (
@@ -141,7 +150,11 @@ export default function TournamentView({id, name = 'Untitled', date}) {
             <button onClick={updateChampionsLibrary}>Charger la liste des champions</button>
             <hr/>
             {/*<div className={"tournament-header"}><span>{name}</span></div>*/}
-            Couleur de fond: <input type="text" value={appConfig.backgroundColor} onChange={(e)=>{setAppConfig({...appConfig, backgroundColor: e.target.value})}}/>
+            Type de trophé: <select value={appConfig.typeOfTrophy} onChange={(e)=>{changeTrophyType(e.target.value)}}>
+            <option value="black">NOIR</option>
+            <option value="white">BLANC</option>
+            <option value="neon">NEON</option>
+        </select> --- Couleur de fond: <input type="text" value={appConfig.backgroundColor} onChange={(e)=>{setAppConfig({...appConfig, backgroundColor: e.target.value})}}/>
             <hr/>
             <button onClick={() => {
                 return addPlayer('New')
@@ -151,7 +164,7 @@ export default function TournamentView({id, name = 'Untitled', date}) {
                 {players.map((item: object, index: number) => {
                     return <TournamentPlayer championsLibrary={championsLibrary} addChampion={addChampion}
                                              updateUsername={updateUsername} removeChampion={removeChampion}
-                                             player={item} key={index} index={index} removeWin={removeWin} addWin={addWin} changeGroup={changeGroup} removePlayer={removePlayer}/>
+                                             player={item} key={index} index={index} removeWin={removeWin} addWin={addWin} changeGroup={changeGroup} removePlayer={removePlayer} appConfig={appConfig}/>
                 })}
             </div>
 

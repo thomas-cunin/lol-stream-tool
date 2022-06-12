@@ -2,27 +2,42 @@
 import DatalistInput, {useComboboxControls} from "react-datalist-input";
 import {ReactComponent as WinIcon} from '../../trophy-silhouette-svgrepo-com.svg';
 import axios from "axios";
+import TrophyBlack from '../../api noir.png';
+import TrophyWhite from '../../api blanc.png';
+import TrophyNeon from '../../api neon.png';
 import {Component} from "react";
 // @ts-ignore
-export default function TournamentPlayer({player, index, updateUsername, removeChampion, addChampion, championsLibrary, addWin,removeWin, changeGroup, removePlayer}) {
+export default function TournamentPlayer({player, index, updateUsername, removeChampion, addChampion, championsLibrary, addWin,removeWin, changeGroup, removePlayer, appConfig}) {
     const { setValue, value } = useComboboxControls({ isExpanded:false,initialValue: '' });
     const wins: JSX.Element[] = [];
     for (let i = 1; i <= player.wins; i++) {
-        wins.push(<WinIcon key={'win-'+i} />);
+        if (appConfig.typeOfTrophy === 'black'){
+            wins.push(<img src={TrophyBlack} />);
+
+        } else if (appConfig.typeOfTrophy === 'white'){
+            wins.push(<img src={TrophyWhite} />);
+
+        } else {
+            wins.push(<img src={TrophyNeon} />);
+
+        }
     }
     return (
         <div className={`tournament-player ${'bg-'+ player.group} ${index % 2 === 0 ? 'even-player':'odd-player'}`}>
             <div className={"player-infos"}><span className={'player-username'}>{player.username}</span></div>
-            <div className="player-wins">
-                {wins}
+            <div className="player-double-row">
+                <div className="player-wins">
+                    {wins}
+                </div>
+                <div className={"player-champions-list"}>
+                    {player.champions.map((chammpion: string, i:number) => {
+                        return <img src={"http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/" + chammpion + ".png"}
+                                    alt=""
+                                    key={'champ-'+player.username+chammpion+i}/>
+                    })}
+                </div>
             </div>
-            <div className={"player-champions-list"}>
-                {player.champions.map((chammpion: string, i:number) => {
-                    return <img src={"http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/" + chammpion + ".png"}
-                                alt=""
-                                key={'champ-'+player.username+chammpion+i}/>
-                })}
-            </div>
+
             <div className={"player-config"}>
                 <label className={"dropdown"}>
                     <div className="dd-button">

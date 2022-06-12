@@ -13,7 +13,7 @@ code {
 }
 
 .tournament-view {
-     width: 1000px;
+     width: 100%;
     /* height: 400px;*/
     left: 0;
     top: 0;
@@ -32,12 +32,18 @@ code {
     gap: 25px;
     padding: 3px;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     flex-direction: row;
     width: 100%;
     border: black solid 1px;
 
-    height: 50px;
+    height: 75px;
+}
+.player-double-row{
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    justify-content: space-between;
 }
 .bg-red{
     background-color: crimson;
@@ -70,16 +76,19 @@ code {
 .player-infos{
     width: 300px;
     text-align: left;
-    flex-grow: 1;
+
 }
 .player-username{
     text-align: left;
     color: white;
     font-size: 24px;
 }
+.player-wins img{
+    width: 35px;
+    height: 35px;
+}
 .player-champions-list{
-    flex-grow: 2;
-    margin-right: auto;
+
     display: flex;
     flex-direction: row;
     gap: 5px;
@@ -87,12 +96,12 @@ code {
     justify-content: start;
 }
 .player-champions-list img{
-    filter: grayscale(80%);
-    height: 45px;
-    width: 45px;
+    height: 35px;
+    width: 35px;
 }
 .player-config{
-    flex-grow: 1;
+    justify-self: end;
+    padding-right: 200px ;
 }
 body {
     color: #000000;
